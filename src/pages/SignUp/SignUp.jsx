@@ -1,20 +1,20 @@
-/* eslint-disable no-unused-vars */
 import React, { useContext } from "react";
 import login from "../../assets/images/login/login.svg";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProviders";
 
-const Login = () => {
-  const { signIn } = useContext(AuthContext);
+const SignUp = () => {
+  const { createUser } = useContext(AuthContext);
 
-  const handleLogin = (event) => {
+  const handleSignUp = (event) => {
     event.preventDefault();
     const form = event.target;
+    const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
+    console.log(name, email, password);
 
-    signIn(email, password)
+    createUser(email, password)
       .then((result) => {
         const loggedUser = result.user;
         console.log(loggedUser);
@@ -32,8 +32,19 @@ const Login = () => {
         </div>
         <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
           <div className="card-body">
-            <h1 className="text-3xl text-center font-bold">Login</h1>
-            <form onSubmit={handleLogin}>
+            <h1 className="text-3xl text-center font-bold">SignUp</h1>
+            <form onSubmit={handleSignUp}>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Name</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="name"
+                  name="name"
+                  className="input input-bordered"
+                />
+              </div>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -47,7 +58,7 @@ const Login = () => {
               </div>
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Password</span>
+                  <span className="label-text">Confirm Password</span>
                 </label>
                 <input
                   type="text"
@@ -65,15 +76,15 @@ const Login = () => {
                 <input
                   className="btn btn-primary"
                   type="submit"
-                  value="Login"
+                  value="Sign Up"
                 />
               </div>
             </form>
             <p className="my-2">
-              New to Car Doctor ?
-              <Link className="underline font-bold" to="/signup">
+              Already Have an Account ?
+              <Link className="underline font-bold" to="/login">
                 {" "}
-                <span className="text-[red]">Sign Up</span>
+                <span className="text-[red]">Login</span>
               </Link>
             </p>
           </div>
@@ -83,4 +94,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

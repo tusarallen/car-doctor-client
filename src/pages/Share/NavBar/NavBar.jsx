@@ -1,9 +1,18 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
+import { AuthContext } from "../../../providers/AuthProviders";
 
 const NavBar = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error.message));
+  };
+
   const navItems = (
     <>
       <li>
@@ -12,6 +21,15 @@ const NavBar = () => {
       <li>
         <Link to="/about">About</Link>
       </li>
+      {user?.email ? (
+        <li>
+          <button onClick={handleLogOut}>Logout</button>
+        </li>
+      ) : (
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+      )}
     </>
   );
 
@@ -50,7 +68,7 @@ const NavBar = () => {
         <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end">
-      <button className="btn btn-outline btn-warning">Appointment</button>
+        <button className="btn btn-outline btn-warning">Appointment</button>
       </div>
     </div>
   );

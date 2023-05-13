@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProviders";
 import BookingRow from "./BookingRow";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Bookings = () => {
   const { user } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
+  const navigate = useNavigate();
 
   const url = `http://localhost:5000/bookings?email=${user?.email}`;
 
@@ -13,12 +15,19 @@ const Bookings = () => {
     fetch(url, {
       method: "GET",
       headers: {
-        "authorization": `Bearer ${localStorage.getItem("car-access-token")}`,
+        authorization: `Bearer ${localStorage.getItem("car-access-token")}`,
       },
     })
       .then((res) => res.json())
-      .then((data) => setBookings(data));
-  }, [url]);
+      .then((data) => {
+        if (!data.error) {
+          setBookings(data);
+        } else {
+          // logout and then navigate
+          navigate("/");
+        }
+      });
+  }, [url, navigate]);
   console.log(bookings);
 
   const handleDelete = (id) => {
@@ -86,7 +95,12 @@ const Bookings = () => {
 
   return (
     <div>
-      <h2 className="text-5xl text-center font-bold text-[red] mb-5">Your Bookings: {bookings.length}</h2>
+      <h2 className="text-5xl text-center font-bold text-[red] mb-5">
+        Your Bookings:{" "}
+        <span className="text-5xl text-center font-bold text-[black] mb-5">
+          {bookings.length}
+        </span>
+      </h2>
       <div className="overflow-x-auto w-full">
         <table className="table w-full">
           {/* head */}

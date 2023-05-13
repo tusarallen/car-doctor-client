@@ -10,7 +10,12 @@ const Bookings = () => {
   const url = `http://localhost:5000/bookings?email=${user?.email}`;
 
   useEffect(() => {
-    fetch(url)
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "authorization": `Bearer ${localStorage.getItem("car-access-token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setBookings(data));
   }, [url]);
@@ -81,7 +86,7 @@ const Bookings = () => {
 
   return (
     <div>
-      <h2 className="text-5xl">Your Bookings: {bookings.length}</h2>
+      <h2 className="text-5xl text-center font-bold text-[red] mb-5">Your Bookings: {bookings.length}</h2>
       <div className="overflow-x-auto w-full">
         <table className="table w-full">
           {/* head */}
